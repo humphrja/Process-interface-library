@@ -50,4 +50,8 @@ class Events {
   void testVector(PVector r){
     ellipse(r.x, r.y, 80, 80);
   }
+  
+  void newMethod(){
+    print("Git test.");
+  }
 }
