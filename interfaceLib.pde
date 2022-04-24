@@ -1,29 +1,31 @@
 Window win1;
+Window win2;
 
-//Button[] buttons;
+Window[] windows;
+
+int currentWindow;
+
 
 void setup() {
   size(400, 400);
-  //buttons = createBtns();
+  
+  windows = new Window[2];
+  currentWindow = 0;
 
-  win1 = new Window();
-  win1.addButton("addNewButton", new Object[] {win1}, "initial", 5, 5, 100, 100, new Palette(color(#3a9bd8), color(#E05263), color(#DC6BAD), color(#FFFCF9)), 20);
-  //print(win1.getBtns());
-
-  //String[] arr = {"ab", "cd"};
-  //arr = Arrays.copyOf(arr, arr.length + 1);
-  //arr[arr.length - 1] = "ef";
-  //println(arr);
+  Palette winPalette = new Palette(color(#3a9bd8), color(#E05263), color(#DC6BAD), color(#FFFCF9));
+  windows[0] = new Window(winPalette);
+  windows[0].addButton("testInt", new Object[] {4, 'a'}, "window0!", 5, 5, 100, 100, 20);
+  windows[0].addButton("setWindow", new Object[] {1}, "change to win1", width - 120, height - 120, 100, 100, 20);
+  
+  windows[1] = new Window(winPalette);
+  windows[1].addButton("testString", new Object[] {"Hello"}, "window1!", 5, 5, 100, 100, 20);
+  windows[1].addButton("setWindow", new Object[] {0}, "change to win0", width - 120, height - 120, 100, 100, 20);
 }
 
 void draw() {
   background(#352D39);
-
-  //for (Button btn : buttons) {
-  //  btn.display();
-  //}
-  
-  win1.display();
+ 
+  windows[currentWindow].display();
 }
 
 Button[] createBtns() {
@@ -66,7 +68,10 @@ class Events {
   }
   
   void addNewButton(Window window){
-    Palette btnPalette = new Palette(color(#3a9bd8), color(#E05263), color(#DC6BAD), color(#FFFCF9));
-    window.addButton("addNewButton", new Object[] {window}, "btn", random(width - 100), random(height - 100), 100, 100, btnPalette, 20);
+    window.addButton("addNewButton", new Object[] {window}, "btn", random(width - 100), random(height - 100), 100, 100, 20);
+  }
+  
+  void setWindow(int newWindowNum){
+    currentWindow = newWindowNum;
   }
 }
