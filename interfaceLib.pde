@@ -1,16 +1,29 @@
-Button[] buttons;
+Window win1;
+
+//Button[] buttons;
 
 void setup() {
   size(400, 400);
-  buttons = createBtns();
+  //buttons = createBtns();
+
+  win1 = new Window();
+  win1.addButton("addNewButton", new Object[] {win1}, "initial", 5, 5, 100, 100, new Palette(color(#3a9bd8), color(#E05263), color(#DC6BAD), color(#FFFCF9)), 20);
+  //print(win1.getBtns());
+
+  //String[] arr = {"ab", "cd"};
+  //arr = Arrays.copyOf(arr, arr.length + 1);
+  //arr[arr.length - 1] = "ef";
+  //println(arr);
 }
 
 void draw() {
   background(#352D39);
 
-  for (Button btn : buttons) {
-    btn.display();
-  }
+  //for (Button btn : buttons) {
+  //  btn.display();
+  //}
+  
+  win1.display();
 }
 
 Button[] createBtns() {
@@ -18,7 +31,7 @@ Button[] createBtns() {
 
   Button btn1 = new Button("testString", new Object[] {"Hello"}, "string", 20, 20, 200, 100, btnPalette, 20);
   Button btn2 = new Button("testInt", new Object[] {4, 'a'}, "int", 300, 150, 50, 50, btnPalette, 20);
-  
+
   Object[] btnArgs = new Object[] {new PVector(10, 200)};
   Button btn3 = new Button("testVector", btnArgs, "vector", 50, 180, 100, 70, btnPalette, 20);
 
@@ -35,6 +48,7 @@ class Events {
     fill(255, 0, 0);
     ellipse(width/2, height/2, 50, 50);
     println(str);
+    //btn1.selected = true
   }
 
   void testChar(char c) {
@@ -46,8 +60,13 @@ class Events {
     ellipse(200, 100, 100, 100);
     println(i, c);
   }
-  
-  void testVector(PVector r){
+
+  void testVector(PVector r) {
     ellipse(r.x, r.y, 80, 80);
+  }
+  
+  void addNewButton(Window window){
+    Palette btnPalette = new Palette(color(#3a9bd8), color(#E05263), color(#DC6BAD), color(#FFFCF9));
+    window.addButton("addNewButton", new Object[] {window}, "btn", random(width - 100), random(height - 100), 100, 100, btnPalette, 20);
   }
 }

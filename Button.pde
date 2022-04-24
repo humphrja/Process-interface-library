@@ -2,7 +2,7 @@ import java.lang.Class;
 import java.lang.reflect.*;
 
 class Button {
-  
+
   Method onPress;                  // The button's on-press method
   Object[] onPressMethodArgs;      // The arguments passed into the on-press method
   Events tempObj;                  // A temporary instance of the Events class used for invoking the method
@@ -13,7 +13,7 @@ class Button {
   int fontSize;
 
   boolean disabled, selected;
-  
+
   // When passing in args, use the following format:
   // new Object[] {arg1, arg2, arg3}
 
@@ -64,7 +64,7 @@ class Button {
     textSize(fontSize);
     text(label, minX, minY, btnWidth, btnHeight);
 
-    if (mouseOver() && mousePressed) {     
+    if (mouseOver() && mousePressed && !disabled) {     
       try {
         onPress.invoke(tempObj, onPressMethodArgs);
       } 
