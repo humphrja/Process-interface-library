@@ -23,6 +23,10 @@ class Window {
   void display() {
     pushMatrix();
     translate(x, y);
+    
+    noStroke();
+    fill(palette.background);
+    rect(0,0, winWidth, winHeight);
 
     for (Button b : btns) {
       b.display();
@@ -39,6 +43,16 @@ class Window {
       rect(0, 0, winWidth, winHeight);
     }
     popMatrix();
+  }
+  
+  void setSize(float w, float h){
+    winWidth = w;
+    winHeight = h;
+  }
+  
+  void position(float xpos, float ypos){
+    x = xpos;
+    y = ypos;
   }
 
 

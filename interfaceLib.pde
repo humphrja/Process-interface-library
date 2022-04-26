@@ -14,8 +14,10 @@ void setup() {
 
   Palette winPalette = new Palette(color(#352D39), color(#FFFFFF), color(#3a9bd8), color(#E05263), color(#DC6BAD));
   windows[0] = new Window(winPalette);
+  windows[0].setSize(600, 600);
+  windows[0].position(100, 100);
   windows[0].addButton("testInt", new Object[] {4, 'a'}, "window0!", 50, 50, 250, 80);
-  windows[0].addButton("setWindow", new Object[] {1}, "change to win1", width - 120, height - 120, 100, 100);
+  windows[0].addButton("setWindow", new Object[] {1}, "change to win1", windows[0].winWidth - 120, windows[0].winHeight - 120, 100, 100);
   
   windows[1] = new Window(winPalette);
   windows[1].addButton("testString", new Object[] {"Hello"}, "window1!", 5, 5, 100, 100);
@@ -26,7 +28,7 @@ void setup() {
 }
 
 void draw() {
-  background(windows[currentWindow].palette.background);
+  //background(windows[currentWindow].palette.background);
  
   windows[currentWindow].display();
   
