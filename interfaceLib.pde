@@ -7,35 +7,40 @@ int currentWindow;
 
 
 void setup() {
-  size(400, 400);
+  size(1000, 1000);
   
   windows = new Window[2];
   currentWindow = 0;
 
-  Palette winPalette = new Palette(color(#3a9bd8), color(#E05263), color(#DC6BAD), color(#FFFCF9));
+  Palette winPalette = new Palette(color(#352D39), color(#FFFFFF), color(#3a9bd8), color(#E05263), color(#DC6BAD));
   windows[0] = new Window(winPalette);
-  windows[0].addButton("testInt", new Object[] {4, 'a'}, "window0!", 5, 5, 100, 100, 20);
-  windows[0].addButton("setWindow", new Object[] {1}, "change to win1", width - 120, height - 120, 100, 100, 20);
+  windows[0].addButton("testInt", new Object[] {4, 'a'}, "window0!", 50, 50, 250, 80);
+  windows[0].addButton("setWindow", new Object[] {1}, "change to win1", width - 120, height - 120, 100, 100);
   
   windows[1] = new Window(winPalette);
-  windows[1].addButton("testString", new Object[] {"Hello"}, "window1!", 5, 5, 100, 100, 20);
-  windows[1].addButton("setWindow", new Object[] {0}, "change to win0", width - 120, height - 120, 100, 100, 20);
+  windows[1].addButton("testString", new Object[] {"Hello"}, "window1!", 5, 5, 100, 100);
+  windows[1].addButton("setWindow", new Object[] {0}, "change to win0", width - 120, height - 120, 100, 100);
+
+  Text txt = windows[0].addText("test", width/2, 200, 40);
+  //txt.align(LEFT, TOP);
 }
 
 void draw() {
-  background(#352D39);
+  background(windows[currentWindow].palette.background);
  
   windows[currentWindow].display();
+  
+  point(windows[0].texts[0].x, windows[0].texts[0].y);
 }
 
 Button[] createBtns() {
   Palette btnPalette = new Palette(color(#3a9bd8), color(#E05263), color(#DC6BAD), color(#FFFCF9));
 
-  Button btn1 = new Button("testString", new Object[] {"Hello"}, "string", 20, 20, 200, 100, btnPalette, 20);
-  Button btn2 = new Button("testInt", new Object[] {4, 'a'}, "int", 300, 150, 50, 50, btnPalette, 20);
+  Button btn1 = new Button("testString", new Object[] {"Hello"}, "string", 20, 20, 200, 100, btnPalette);
+  Button btn2 = new Button("testInt", new Object[] {4, 'a'}, "int", 300, 150, 50, 50, btnPalette);
 
   Object[] btnArgs = new Object[] {new PVector(10, 200)};
-  Button btn3 = new Button("testVector", btnArgs, "vector", 50, 180, 100, 70, btnPalette, 20);
+  Button btn3 = new Button("testVector", btnArgs, "vector", 50, 180, 100, 70, btnPalette);
 
   Button[] btns = {btn1, btn2, btn3};
 
@@ -68,7 +73,7 @@ class Events {
   }
   
   void addNewButton(Window window){
-    window.addButton("addNewButton", new Object[] {window}, "btn", random(width - 100), random(height - 100), 100, 100, 20);
+    window.addButton("addNewButton", new Object[] {window}, "btn", random(width - 100), random(height - 100), 100, 100);
   }
   
   void setWindow(int newWindowNum){

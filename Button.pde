@@ -10,14 +10,15 @@ class Button {
   String label;
   float minX, minY, btnWidth, btnHeight;
   Palette colours;
-  int fontSize;
+  int textSize, strokeWeight;
 
-  boolean disabled, selected;
+  boolean disabled, selected, pMousePressed;
+
 
   // When passing in args, use the following format:
   // new Object[] {arg1, arg2, arg3}
 
-  Button(String mName, Object[] args, String t, float x, float y, float w, float h, Palette cols, int fsize) {
+  Button(String mName, Object[] args, String t, float x, float y, float w, float h, Palette cols) {
 
     Method[] methods = Events.class.getDeclaredMethods();    // Returns all methods within the Events class into an array
 
@@ -37,7 +38,13 @@ class Button {
     btnHeight = h;
 
     colours = cols;
-    fontSize = fsize;
+    textSize = 20;
+    strokeWeight = 4;
+    
+    textSize =  int(w*h/500);            // Default values
+    strokeWeight = int(2*(w+h)/150);
+    
+    pMousePressed = false;
   }
 
   boolean mouseOver() {
@@ -53,7 +60,7 @@ class Button {
       fill(colours.primary);
     }
 
-    strokeWeight(fontSize/5);
+    strokeWeight(strokeWeight);
     stroke(colours.stroke);
     rectMode(CORNER);
     rect(minX, minY, btnWidth, btnHeight);
@@ -61,10 +68,10 @@ class Button {
     noFill();
     fill(colours.stroke);
     textAlign(CENTER, CENTER);
-    textSize(fontSize);
+    textSize(textSize);
     text(label, minX, minY, btnWidth, btnHeight);
 
-    if (mouseOver() && mousePressed && !disabled) {     
+    if (mouseOver() && (pMousePressed && !mousePressed) && !disabled) {       // mouseReleased = pMousePressed && !mousePressed
       try {
         onPress.invoke(tempObj, onPressMethodArgs);
       } 
@@ -72,5 +79,7 @@ class Button {
         e.printStackTrace();
       }
     }
+    
+    pMousePressed = mousePressed;
   }
 }

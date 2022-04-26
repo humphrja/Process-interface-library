@@ -1,10 +1,11 @@
 class Palette {
-  color primary, highlight, select, stroke;
+  color background, stroke, primary, highlight, select;
 
-  Palette(color prim, color hlht, color slct, color strk) {  
-    primary = prim;
-    highlight = hlht;
-    select = slct;
-    stroke = strk;
+  Palette(color... colors) {  
+    background = colors[0];
+    stroke = colors[1];
+    primary = colors[2];
+    highlight = colors[3];
+    select = colors[4];
   }
 }
