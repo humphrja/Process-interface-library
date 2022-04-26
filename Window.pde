@@ -21,12 +21,9 @@ class Window {
 
 
   void display() {
-    pushMatrix();
-    translate(x, y);
-    
     noStroke();
     fill(palette.background);
-    rect(0,0, winWidth, winHeight);
+    rect(x, y, winWidth, winHeight);
 
     for (Button b : btns) {
       b.display();
@@ -40,24 +37,23 @@ class Window {
       strokeWeight(borderStrokeWeight);
       stroke(palette.stroke);
       noFill();
-      rect(0, 0, winWidth, winHeight);
+      rect(x, y, winWidth, winHeight);
     }
-    popMatrix();
   }
-  
-  void setSize(float w, float h){
+
+  void setSize(float w, float h) {
     winWidth = w;
     winHeight = h;
   }
-  
-  void position(float xpos, float ypos){
+
+  void position(float xpos, float ypos) {
     x = xpos;
     y = ypos;
   }
 
 
-  Button addButton(String methodName, Object[] methodArgs, String label, float x, float y, float w, float h) {
-    Button btn = new Button(methodName, methodArgs, label, x, y, w, h, palette);
+  Button addButton(String methodName, Object[] methodArgs, String label, float btnx, float btny, float w, float h) {
+    Button btn = new Button(methodName, methodArgs, label, btnx + x, btny + y, w, h, palette);
 
     btns = Arrays.copyOf(btns, btns.length + 1);
     btns[btns.length - 1] = btn;
@@ -65,8 +61,8 @@ class Window {
     return btn;
   }
 
-  Text addText(String text, float x, float y, int size) {
-    Text txt = new Text(text, x, y, size, palette.stroke);
+  Text addText(String text, float tx, float ty, int size) {
+    Text txt = new Text(text, tx + x, ty + y, size, palette.stroke);
 
     texts = Arrays.copyOf(texts, texts.length + 1);
     texts[texts.length - 1] = txt;    
