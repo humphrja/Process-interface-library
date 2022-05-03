@@ -18,9 +18,10 @@ class Button {
   // When passing in args, use the following format:
   // new Object[] {arg1, arg2, arg3}
 
-  Button(String mName, Object[] args, String t, float x, float y, float w, float h, Palette cols) {
-
-    Method[] methods = Events.class.getDeclaredMethods();    // Returns all methods within the Events class into an array
+  Button(String mName, Object[] args, Object classInstance,  String t, float x, float y, float w, float h, Palette cols) {
+   
+    Class c = classInstance.getClass();  
+    Method[] methods = c.getDeclaredMethods();    // Returns all methods within the c class into an array
 
     for (Method m : methods) {                               // Searches through the array by method name and assigns onPress to the corresponding method
       if (m.getName() == mName) {
@@ -40,10 +41,10 @@ class Button {
     colours = cols;
     textSize = 20;
     strokeWeight = 4;
-    
+
     textSize =  int(w*h/500);            // Default values
     strokeWeight = int(2*(w+h)/150);
-    
+
     pMousePressed = false;
   }
 
@@ -51,25 +52,25 @@ class Button {
     return mouseX >= minX && mouseY >= minY && mouseX <= minX + btnWidth && mouseY <= minY + btnHeight;
   }
 
-  void display() {
+  void display(PGraphics c) {
     if (mouseOver() && !disabled) {
-      fill(colours.highlight);
+      c.fill(colours.highlight);
     } else if (selected) {
-      fill(colours.select);
+      c.fill(colours.select);
     } else {
-      fill(colours.primary);
+      c.fill(colours.primary);
     }
 
-    strokeWeight(strokeWeight);
-    stroke(colours.stroke);
-    rectMode(CORNER);
-    rect(minX, minY, btnWidth, btnHeight);
+    c.strokeWeight(strokeWeight);
+    c.stroke(colours.stroke);
+    c.rectMode(CORNER);
+    c.rect(minX, minY, btnWidth, btnHeight);
 
-    noFill();
-    fill(colours.stroke);
-    textAlign(CENTER, CENTER);
-    textSize(textSize);
-    text(label, minX, minY, btnWidth, btnHeight);
+    c.noFill();
+    c.fill(colours.stroke);
+    c.textAlign(CENTER, CENTER);
+    c.textSize(textSize);
+    c.text(label, minX, minY, btnWidth, btnHeight);
 
     if (mouseOver() && (pMousePressed && !mousePressed) && !disabled) {       // mouseReleased = pMousePressed && !mousePressed
       try {
@@ -79,7 +80,7 @@ class Button {
         e.printStackTrace();
       }
     }
-    
+
     pMousePressed = mousePressed;
   }
 }

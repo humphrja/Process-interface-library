@@ -8,7 +8,10 @@ int currentWindow;
 
 void setup() {
   size(1000, 1000);
+  background(51);
   
+  Events E = new Events();
+
   windows = new Window[2];
   currentWindow = 0;
 
@@ -16,33 +19,35 @@ void setup() {
   windows[0] = new Window(winPalette);
   windows[0].setSize(600, 600);
   windows[0].position(100, 100);
-  windows[0].addButton("testInt", new Object[] {4, 'a'}, "window0!", 50, 50, 250, 80);
-  windows[0].addButton("setWindow", new Object[] {1}, "change to win1", windows[0].winWidth - 120, windows[0].winHeight - 120, 100, 100);
-  
+  windows[0].addButton("testInt", new Object[] {4, 'a'}, E, "window0!", 50, 50, 250, 80);
+  windows[0].addButton("setWindow", new Object[] {1}, E, "change to win1", windows[0].winWidth - 120, windows[0].winHeight - 120, 100, 100);
+
   windows[1] = new Window(winPalette);
-  windows[1].addButton("testString", new Object[] {"Hello"}, "window1!", 5, 5, 100, 100);
-  windows[1].addButton("setWindow", new Object[] {0}, "change to win0", width - 120, height - 120, 100, 100);
+  windows[1].addButton("testString", new Object[] {"Hello"}, E, "window1!", 5, 5, 100, 100);
+  windows[1].addButton("setWindow", new Object[] {0}, E, "change to win0", width - 120, height - 120, 100, 100);
 
   Text txt = windows[0].addText("test", width/2, 200, 40);
   //txt.align(LEFT, TOP);
+  
+  
+  //testFunction(testString.getMethod());
+  
 }
 
 void draw() {
   //background(windows[currentWindow].palette.background);
- 
-  windows[currentWindow].display();
-  
-  point(windows[0].texts[0].x, windows[0].texts[0].y);
+
+  windows[currentWindow].display(g);                    // g is the default PGraphics object for the main sketch
 }
 
 Button[] createBtns() {
   Palette btnPalette = new Palette(color(#3a9bd8), color(#E05263), color(#DC6BAD), color(#FFFCF9));
 
-  Button btn1 = new Button("testString", new Object[] {"Hello"}, "string", 20, 20, 200, 100, btnPalette);
-  Button btn2 = new Button("testInt", new Object[] {4, 'a'}, "int", 300, 150, 50, 50, btnPalette);
+  Button btn1 = new Button("testString", new Object[] {"Hello"}, new Events(), "string", 20, 20, 200, 100, btnPalette);
+  Button btn2 = new Button("testInt", new Object[] {4, 'a'}, new Events(), "int", 300, 150, 50, 50, btnPalette);
 
   Object[] btnArgs = new Object[] {new PVector(10, 200)};
-  Button btn3 = new Button("testVector", btnArgs, "vector", 50, 180, 100, 70, btnPalette);
+  Button btn3 = new Button("testVector", btnArgs, new Events(), "vector", 50, 180, 100, 70, btnPalette);
 
   Button[] btns = {btn1, btn2, btn3};
 
@@ -57,7 +62,6 @@ class Events {
     fill(255, 0, 0);
     ellipse(width/2, height/2, 50, 50);
     println(str);
-    //btn1.selected = true
   }
 
   void testChar(char c) {
@@ -73,12 +77,22 @@ class Events {
   void testVector(PVector r) {
     ellipse(r.x, r.y, 80, 80);
   }
-  
-  void addNewButton(Window window){
-    window.addButton("addNewButton", new Object[] {window}, "btn", random(width - 100), random(height - 100), 100, 100);
+
+  void addNewButton(Window window) {
+    window.addButton("addNewButton", new Object[] {window}, new Events(), "btn", random(width - 100), random(height - 100), 100, 100);
   }
-  
-  void setWindow(int newWindowNum){
+
+  void setWindow(int newWindowNum) {
     currentWindow = newWindowNum;
   }
+}
+
+
+class Events2{
+  ;
+}
+
+
+void testFunction(Method m, Object[] args) {
+  print(m.getName());
 }

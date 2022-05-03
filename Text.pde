@@ -14,14 +14,14 @@ class Text {
     alignY = CENTER;
   }
 
-  void display() {
-    textAlign(alignX, alignY);
-    textSize(size);
+  void display(PGraphics c) {
+    c.textAlign(alignX, alignY);
+    c.textSize(size);
 
-    noFill();
-    fill(stroke);
+    c.noFill();
+    c.fill(stroke);
 
-    text(content, x, y);
+    c.text(content, x, y);
   }
   
   void align(int ax, int ay){

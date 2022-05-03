@@ -4,8 +4,9 @@ class Window {
   Palette palette;
   Button[] btns = new Button[0];
   Text[] texts = new Text[0];
+  ScrollWindow[] sWindows = new ScrollWindow[0];
 
-  float x, y, winWidth, winHeight;
+  int x, y, winWidth, winHeight;
   boolean border;
   int borderStrokeWeight;
 
@@ -20,40 +21,44 @@ class Window {
   }
 
 
-  void display() {
-    noStroke();
-    fill(palette.background);
-    rect(x, y, winWidth, winHeight);
+  void display(PGraphics c) {    // c = canvas
+    c.noStroke();
+    c.fill(palette.background);
+    c.rect(x, y, winWidth, winHeight);
 
     for (Button b : btns) {
-      b.display();
+      b.display(c);
     }
 
     for (Text t : texts) {
-      t.display();
+      t.display(c);
+    }
+    
+    for (ScrollWindow sw : sWindows){
+      sw.display(sw.canvas);
     }
 
     if (border) {
-      strokeWeight(borderStrokeWeight);
-      stroke(palette.stroke);
-      noFill();
-      rect(x, y, winWidth, winHeight);
+      c.strokeWeight(borderStrokeWeight);
+      c.stroke(palette.stroke);
+      c.noFill();
+      c.rect(x, y, winWidth, winHeight);
     }
   }
 
-  void setSize(float w, float h) {
+  void setSize(int w, int h) {
     winWidth = w;
     winHeight = h;
   }
 
-  void position(float xpos, float ypos) {
+  void position(int xpos, int ypos) {
     x = xpos;
     y = ypos;
   }
 
 
-  Button addButton(String methodName, Object[] methodArgs, String label, float btnx, float btny, float w, float h) {
-    Button btn = new Button(methodName, methodArgs, label, btnx + x, btny + y, w, h, palette);
+  Button addButton(String methodName, Object[] methodArgs, Object instance, String label, float btnx, float btny, float w, float h) {
+    Button btn = new Button(methodName, methodArgs, instance, label, btnx + x, btny + y, w, h, palette);
 
     btns = Arrays.copyOf(btns, btns.length + 1);
     btns[btns.length - 1] = btn;
@@ -68,5 +73,25 @@ class Window {
     texts[texts.length - 1] = txt;    
 
     return txt;
+  }
+}
+
+
+class ScrollWindow extends Window {
+  PGraphics canvas;             // scrollCanvas
+  float scroll;                 // Represents the vertical translation of the window
+  
+  ScrollWindow(Palette cols, int x, int y, int w, int h) {
+    super(cols);    // This is like creating a new Window object
+    
+    setSize(w, h);
+    position(x, y);
+    
+    canvas = createGraphics(w, h);
+    scroll = 0;
+  }
+  
+  void displayScrollButtons(){
+    ;
   }
 }
