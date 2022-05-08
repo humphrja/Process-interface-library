@@ -5,7 +5,7 @@ class Button {
 
   Method onPress;                  // The button's on-press method
   Object[] onPressMethodArgs;      // The arguments passed into the on-press method
-  Events tempObj;                  // A temporary instance of the Events class used for invoking the method
+  Object tempObj;                  // A temporary instance of the Events class used for invoking the method
 
   String label;
   float minX, minY, btnWidth, btnHeight;
@@ -19,17 +19,17 @@ class Button {
   // new Object[] {arg1, arg2, arg3}
 
   Button(String mName, Object[] args, Object classInstance,  String t, float x, float y, float w, float h, Palette cols) {
-   
-    Class c = classInstance.getClass();  
-    Method[] methods = c.getDeclaredMethods();    // Returns all methods within the c class into an array
+    
+    tempObj = classInstance;
+    Method[] methods = classInstance.getClass().getDeclaredMethods();    // Returns all methods within the appropriate class into an array
 
-    for (Method m : methods) {                               // Searches through the array by method name and assigns onPress to the corresponding method
+    for (Method m : methods) {                                           // Searches through the array by method name and assigns onPress to the corresponding method
       if (m.getName() == mName) {
+        println(m);
         onPress = m;
       }
     }
 
-    tempObj = new Events();
     onPressMethodArgs = args;
 
     label = t;
@@ -42,7 +42,7 @@ class Button {
     textSize = 20;
     strokeWeight = 4;
 
-    textSize =  int(w*h/500);            // Default values
+    //textSize =  int(w*h/(50*t.length()));            // Default values, good for horizontally long rectangles
     strokeWeight = int(2*(w+h)/150);
 
     pMousePressed = false;

@@ -9,8 +9,10 @@ int currentWindow;
 void setup() {
   size(1000, 1000);
   background(51);
-  
+
   Events E = new Events();
+
+  PApplet P = new PApplet();
 
   windows = new Window[2];
   currentWindow = 0;
@@ -19,23 +21,23 @@ void setup() {
   windows[0] = new Window(winPalette);
   windows[0].setSize(600, 600);
   windows[0].position(100, 100);
-  windows[0].addButton("testInt", new Object[] {4, 'a'}, E, "window0!", 50, 50, 250, 80);
-  windows[0].addButton("setWindow", new Object[] {1}, E, "change to win1", windows[0].winWidth - 120, windows[0].winHeight - 120, 100, 100);
+  windows[0].addButton("testFunction", new Object[] {}, this, "This is window 1", 50, 50, 250, 80);
+  windows[0].addButton("setWindow", new Object[] {1}, E, "Change to window 1", windows[0].winWidth - 120, windows[0].winHeight - 120, 100, 100);
 
   windows[1] = new Window(winPalette);
-  windows[1].addButton("testString", new Object[] {"Hello"}, E, "window1!", 5, 5, 100, 100);
-  windows[1].addButton("setWindow", new Object[] {0}, E, "change to win0", width - 120, height - 120, 100, 100);
+  windows[1].addButton("testString", new Object[] {"Hello"}, E, "This is window 2", 5, 5, 100, 100);
+  windows[1].addButton("setWindow", new Object[] {0}, E, "Change to window 2", width - 120, height - 120, 100, 100);
 
   Text txt = windows[0].addText("test", width/2, 200, 40);
   //txt.align(LEFT, TOP);
-  
-  
-  //testFunction(testString.getMethod());
-  
+
+
+  windows[1].addContent("testWindowDisplay", new Object[] {100}, this);
+  windows[1].addContent("testWindowDisplay", new Object[] {-100}, this);
 }
 
 void draw() {
-  //background(windows[currentWindow].palette.background);
+  background(0);
 
   windows[currentWindow].display(g);                    // g is the default PGraphics object for the main sketch
 }
@@ -88,11 +90,16 @@ class Events {
 }
 
 
-class Events2{
-  ;
+void testFunction() {
+  println("Testing PApplet base class");
 }
 
 
-void testFunction(Method m, Object[] args) {
-  print(m.getName());
+void testWindowDisplay(int offset) {
+  println(frameCount % 200);
+  float a = map(frameCount % 200, 0, 200, 0, 360);
+
+  colorMode(HSB, 360, 100, 100); 
+  fill(a, 255, 255);
+  ellipse(mouseX + offset, mouseY, 100, 100);
 }
