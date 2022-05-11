@@ -33,10 +33,14 @@ class Window {
     c.fill(palette.background);
     c.rect(x, y, winWidth, winHeight);                // Background
 
+
     for (int i = 0; i < displayMethods.length; i++) { // Content
       try {
+        c.pushMatrix();
         displayMethods[i].invoke(classInstances[i], displayArgs[i]);
-      } catch (Exception e){
+        c.popMatrix();
+      } 
+      catch (Exception e) {
         e.printStackTrace();
       }
     }

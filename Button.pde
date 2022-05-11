@@ -7,7 +7,7 @@ class Button {
   Object[] onPressMethodArgs;      // The arguments passed into the on-press method
   Object tempObj;                  // A temporary instance of the Events class used for invoking the method
 
-  String label;
+  String label, activationType;
   float minX, minY, btnWidth, btnHeight;
   Palette colours;
   int textSize, strokeWeight;
@@ -18,14 +18,14 @@ class Button {
   // When passing in args, use the following format:
   // new Object[] {arg1, arg2, arg3}
 
-  Button(String mName, Object[] args, Object classInstance,  String t, float x, float y, float w, float h, Palette cols) {
-    
+  Button(String mName, Object[] args, Object classInstance, String t, float x, float y, float w, float h, Palette cols) {
+
     tempObj = classInstance;
     Method[] methods = classInstance.getClass().getDeclaredMethods();    // Returns all methods within the appropriate class into an array
 
     for (Method m : methods) {                                           // Searches through the array by method name and assigns onPress to the corresponding method
       if (m.getName() == mName) {
-        println(m);
+        //println(m);
         onPress = m;
       }
     }
@@ -45,11 +45,28 @@ class Button {
     //textSize =  int(w*h/(50*t.length()));            // Default values, good for horizontally long rectangles
     strokeWeight = int(2*(w+h)/150);
 
+    activationType = "on_release";
     pMousePressed = false;
+  }
+
+  void setActivation(String type) {
+    activationType = type;
   }
 
   boolean mouseOver() {
     return mouseX >= minX && mouseY >= minY && mouseX <= minX + btnWidth && mouseY <= minY + btnHeight;
+  }
+
+  boolean activated() {
+    if (activationType == "on_press") {
+      return !pMousePressed && mousePressed;
+    } else if (activationType == "on_release") {
+      return pMousePressed && !mousePressed;
+    } else if (activationType == "hold") {
+      return mousePressed;
+    } else {
+      return false;
+    }
   }
 
   void display(PGraphics c) {
@@ -72,7 +89,7 @@ class Button {
     c.textSize(textSize);
     c.text(label, minX, minY, btnWidth, btnHeight);
 
-    if (mouseOver() && (pMousePressed && !mousePressed) && !disabled) {       // mouseReleased = pMousePressed && !mousePressed
+    if (mouseOver() && activated() && !disabled) {       // mouseReleased = pMousePressed && !mousePressed
       try {
         onPress.invoke(tempObj, onPressMethodArgs);
       } 

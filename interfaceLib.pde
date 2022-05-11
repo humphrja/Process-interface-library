@@ -8,32 +8,91 @@ int currentWindow;
 
 void setup() {
   size(1000, 1000);
-  background(51);
+
+  currentWindow = 0;
+  windows = new Window[7];
 
   Events E = new Events();
 
-  PApplet P = new PApplet();
-
-  windows = new Window[2];
-  currentWindow = 0;
-
   Palette winPalette = new Palette(color(#352D39), color(#FFFFFF), color(#3a9bd8), color(#E05263), color(#DC6BAD));
-  windows[0] = new Window(winPalette);
-  windows[0].setSize(600, 600);
-  windows[0].position(100, 100);
-  windows[0].addButton("testFunction", new Object[] {}, this, "This is window 1", 50, 50, 250, 80);
-  windows[0].addButton("setWindow", new Object[] {1}, E, "Change to window 1", windows[0].winWidth - 120, windows[0].winHeight - 120, 100, 100);
 
-  windows[1] = new Window(winPalette);
-  windows[1].addButton("testString", new Object[] {"Hello"}, E, "This is window 2", 5, 5, 100, 100);
-  windows[1].addButton("setWindow", new Object[] {0}, E, "Change to window 2", width - 120, height - 120, 100, 100);
+  int nx = 3;
+  int ny = 2;
+  int btnW = 150;
+  int btnH = 100;
+  int spacing = 25;
 
-  Text txt = windows[0].addText("test", width/2, 200, 40);
-  //txt.align(LEFT, TOP);
+  Window w = new Window(winPalette);        // Main menu - select an example window
+  Text t = w.addText("Choose an example window", width/2, 100, 35);
+  t.align(CENTER, BOTTOM);
+
+  float ix = width/2 - (ny*btnW + (ny-1)*spacing)/2;
+  float iy = height - (ny*btnH + (ny-1)*spacing);
+
+  createStartBtnGrid(w);
+
+  windows[0] = w;
 
 
-  windows[1].addContent("testWindowDisplay", new Object[] {100}, this);
-  windows[1].addContent("testWindowDisplay", new Object[] {-100}, this);
+  Palette p2 = new Palette(color(#05F140), color(#1A181B), color(#2CDA9D), color(#3E8989), color(#564D65));
+  Window w1 = new Window(p2);      // Different colour palette
+  createBackToHomeBtn(w1);
+  createHeading(w1, "Windows can have different colour palettes.");
+
+  windows[1] = w1;
+
+
+  Window w2 = new Window(winPalette);      // Display different content
+  createBackToHomeBtn(w2);
+  createHeading(w2, "Windows can display content from custom methods too");
+  w2.addContent("exampleDisplayMethod", new Object[] {}, this);
+
+  windows[2] = w2;
+
+
+  Window w3 = new Window(winPalette);      // Be of different sizes and be within each other
+  createBackToHomeBtn(w3);
+  createHeading(w3, "Windows can exist within different windows!");
+
+  windows[3] = w3;
+
+
+  Window w4 = new Window(winPalette);      // Scroll window
+  createBackToHomeBtn(w4);
+  createHeading(w4, "Scroll windows allow you to have scroll features :)");
+
+  windows[4] = w4;
+
+
+  Window w5 = new Window(winPalette);      // Buttons - shows different type of button activations -> on_press, on_release, hold
+  createBackToHomeBtn(w5);
+  createHeading(w5, "Buttons can have different activation types...");
+  Button btn1 = w5.addButton("testString", new Object[] {"aa"}, E, "On Release", 100, 300, 200, 70);
+  Button btn2 = w5.addButton("testString", new Object[] {"aa"}, E, "On Press", 350, 300, 200, 70);
+  btn2.setActivation("on_press");
+  Button btn3 = w5.addButton("testString", new Object[] {"aa"}, E, "Hold", 600, 300, 200, 70);
+  btn3.setActivation("hold");
+  
+
+  windows[5] = w5;
+
+
+  Window w6 = new Window(winPalette);      // Button recursion
+  createBackToHomeBtn(w6);
+  createHeading(w6, "Recursion?!");
+  w6.addButton("addNewButton", new Object[] {w6}, E, "btn", random(width), random(height), 100, 100);
+
+  windows[6] = w6;
+
+
+  frameRate(120);
+
+  arms[0] = new Arm(200, 0.02, -0.05);
+  arms[1] = new Arm(100, -0.04, 0);
+
+  prevPoint = PVector.add(arms[0].position, arms[1].position);
+
+  dotCanvas = createGraphics(width, height);
 }
 
 void draw() {
@@ -57,12 +116,57 @@ Button[] createBtns() {
 }
 
 
+void createStartBtnGrid(Window w) {
+  int nx = 3;
+  int ny = 2;
+  int btnW = 150;
+  int btnH = 100;
+  int spacing = 25;
+
+  float ix = width/2 - (nx*btnW + (nx-1)*spacing)/2;
+  float iy = height - (ny*btnH + (ny+1)*spacing);
+
+  String f = "setWindow";
+
+
+  String[] labels = {"Colour", "Visuals", "Sub-windows", "Scroll windows", "Buttons", "Recursion"};
+
+  for (int row = 0; row < ny; row++) {
+    for (int col = 0; col < nx; col++) {
+      float x = ix + col*(btnW + spacing);
+      float y  = iy + row*(btnH + spacing);
+
+      Object[] args = new Object[] {col + row*nx + 1};
+      w.addButton(f, args, this, labels[col + row*nx], x, y, btnW, btnH);
+    }
+  }
+}
+
+
+void createBackToHomeBtn(Window w) {
+  w.addButton("setWindow", new Object[] {0}, this, "Back to main menu", w.winWidth - 120, w.winHeight - 120, 100, 100);
+}
+
+void createHeading(Window w, String title) {
+  Text t = w.addText(title, width/2, 50, 35);
+  t.align(CENTER, TOP);
+
+  w.addContent("underline", new Object[] {}, this);
+}
+
+void underline() {
+  stroke(255);
+  strokeWeight(4);
+  line(width/2 - 400, 110, width/2 + 400, 110);
+}
+
+
 
 class Events {
 
   void testString(String str) {
     fill(255, 0, 0);
-    ellipse(width/2, height/2, 50, 50);
+    ellipse(width/2, height/2 + 200, 150, 150);
     println(str);
   }
 
@@ -83,10 +187,11 @@ class Events {
   void addNewButton(Window window) {
     window.addButton("addNewButton", new Object[] {window}, new Events(), "btn", random(width - 100), random(height - 100), 100, 100);
   }
+}
 
-  void setWindow(int newWindowNum) {
-    currentWindow = newWindowNum;
-  }
+
+void setWindow(int newWindowNum) {
+  currentWindow = newWindowNum;
 }
 
 
@@ -102,4 +207,85 @@ void testWindowDisplay(int offset) {
   colorMode(HSB, 360, 100, 100); 
   fill(a, 255, 255);
   ellipse(mouseX + offset, mouseY, 100, 100);
+}
+
+
+
+Arm[] arms = new Arm[2];
+PGraphics dotCanvas;
+PVector prevPoint;
+
+void exampleDisplayMethod() {
+  float w = width - 100;
+  float h = height - 300;
+  fill(255);
+  rect(50, 150, w, h);
+
+  translate(width/2, height/2); 
+
+  PVector resultant = new PVector(0, 0);
+  for (Arm tempArm : arms) {
+    //tempArm.display();
+    if (tempArm.visible) {
+      stroke(0);
+    } else {
+      stroke(255, 0);
+    }
+
+    strokeWeight(2);
+    circle(resultant.x + tempArm.position.x, resultant.y + tempArm.position.y, 0.25*tempArm.position.mag());
+
+
+    resultant.add(tempArm.position);
+    tempArm.update();
+  }
+  circle(0, 0, 60);
+
+  dotCanvas.beginDraw();
+  dotCanvas.translate(width/2.0, height/2.0);
+  dotCanvas.stroke(0, 100);
+  //dotCanvas.strokeWeight(4)
+  //dotCanvas.point(resultant.x, resultant.y)
+  dotCanvas.strokeWeight(2);
+  dotCanvas.line(prevPoint.x, prevPoint.y, resultant.x, resultant.y);
+  dotCanvas.endDraw();
+  image(dotCanvas, -width/2.0, -height/2.0);
+
+  prevPoint = resultant;
+}
+
+
+
+class Arm {
+  float rotRate;
+  float growRate;
+
+  PVector position = new PVector(1.0, 0.0);
+
+  boolean visible = true;
+  boolean pMousePressed = false;
+
+  Arm(float radius, float dtheta, float dr) {
+    position.setMag(radius);
+
+    rotRate = dtheta;
+    growRate = dr;
+  }
+
+  void update() {
+    position.rotate(rotRate);
+    position.setMag(position.mag() + growRate);
+
+    if (mousePressed && !pMousePressed) {
+      visible = !visible;
+    }
+
+    pMousePressed = mousePressed;
+  }
+
+  void display() {
+    if (visible) {
+      strokeWeight(2);
+    }
+  }
 }
