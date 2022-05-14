@@ -1,3 +1,5 @@
+// The Text object is used to display text to the screen, like a textbox or a title
+
 class Text {
   String content;
   float x, y;
@@ -10,7 +12,7 @@ class Text {
     y = ypos;
     stroke = textFill;
     size = s;
-    alignX = CENTER;    // Default align is CENTER, CENTER
+    alignX = CENTER;            // Default align is CENTER, CENTER
     alignY = CENTER;
   }
 
@@ -25,7 +27,7 @@ class Text {
   }
   
   void align(int ax, int ay){
-    alignX = ax;
-    alignY = ay;
+    alignX = ax;                // LEFT, CENTER or RIGHT
+    alignY = ay;                // TOP, CENTER or BOTTOM
   }
 }

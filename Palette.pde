@@ -1,3 +1,5 @@
+// This class is used for organising different colours associated with an object into one class
+
 class Palette {
   color background, stroke, primary, highlight, select;
 
