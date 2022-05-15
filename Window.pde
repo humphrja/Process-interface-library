@@ -75,6 +75,12 @@ class Window {
     winWidth = w;
     winHeight = h;
   }
+  
+  void addHeading(String title){
+    Text t = this.addText(title, width/2, 65, 35);
+    t.align(CENTER, BOTTOM);
+    t.underline(5*winWidth/6);
+  }
 
 
 

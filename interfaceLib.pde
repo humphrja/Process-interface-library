@@ -1,10 +1,5 @@
-Window win1;
-Window win2;
-
 Window[] windows;
-
 int currentWindow;
-
 
 void setup() {
   size(1000, 1000);
@@ -32,19 +27,20 @@ void setup() {
   createStartBtnGrid(w);
 
   windows[0] = w;
+  w.addButton("close", new Object[] {}, this, "Exit", width/2 - 100, height - 100, 200, 70);
 
 
   Palette p2 = new Palette(color(#05F140), color(#1A181B), color(#2CDA9D), color(#3E8989), color(#564D65));
   Window w1 = new Window(p2);      // Different colour palette
   createBackToHomeBtn(w1);
-  createHeading(w1, "Windows can have different colour palettes.");
+  w1.addHeading("Windows can have different colour palettes.");
 
   windows[1] = w1;
 
 
   Window w2 = new Window(winPalette);      // Display different content
   createBackToHomeBtn(w2);
-  createHeading(w2, "Windows can display content from custom methods too");
+  w2.addHeading("Windows can display content from custom methods too");
   w2.addContent("exampleDisplayMethod", new Object[] {}, this);
 
   windows[2] = w2;
@@ -52,21 +48,21 @@ void setup() {
 
   Window w3 = new Window(winPalette);      // Be of different sizes and be within each other
   createBackToHomeBtn(w3);
-  createHeading(w3, "Windows can exist within different windows!");
+  w3.addHeading("Windows can exist within different windows!");
 
   windows[3] = w3;
 
 
   Window w4 = new Window(winPalette);      // Scroll window
   createBackToHomeBtn(w4);
-  createHeading(w4, "Scroll windows allow you to have scroll features :)");
+  w4.addHeading("Scroll windows allow you to have scroll features :)");
 
   windows[4] = w4;
 
 
   Window w5 = new Window(winPalette);      // Buttons - shows different type of button activations -> on_press, on_release, hold
   createBackToHomeBtn(w5);
-  createHeading(w5, "Buttons can have different activation types...");
+  w5.addHeading("Buttons can have different activation types...");
   Button btn1 = w5.addButton("testString", new Object[] {"aa"}, E, "On Release", 100, 300, 200, 70);
   Button btn2 = w5.addButton("testString", new Object[] {"aa"}, E, "On Press", 350, 300, 200, 70);
   btn2.setActivation("on_press");
@@ -79,7 +75,7 @@ void setup() {
 
   Window w6 = new Window(winPalette);      // Button recursion
   createBackToHomeBtn(w6);
-  createHeading(w6, "Recursion?!");
+  w6.addHeading("Recursion?!");
   w6.addButton("addNewButton", new Object[] {w6}, E, "btn", random(width), random(height), 100, 100);
 
   windows[6] = w6;
@@ -124,7 +120,7 @@ void createStartBtnGrid(Window w) {
   int spacing = 25;
 
   float ix = width/2 - (nx*btnW + (nx-1)*spacing)/2;
-  float iy = height - (ny*btnH + (ny+1)*spacing);
+  float iy = height - (ny*btnH + (ny+1)*spacing) - 150;
 
   String f = "setWindow";
 
@@ -147,19 +143,9 @@ void createBackToHomeBtn(Window w) {
   w.addButton("setWindow", new Object[] {0}, this, "Back to main menu", w.winWidth - 120, w.winHeight - 120, 100, 100);
 }
 
-void createHeading(Window w, String title) {
-  Text t = w.addText(title, width/2, 50, 35);
-  t.align(CENTER, TOP);
-
-  w.addContent("underline", new Object[] {}, this);
+void close(){
+  exit();
 }
-
-void underline() {
-  stroke(255);
-  strokeWeight(4);
-  line(width/2 - 400, 110, width/2 + 400, 110);
-}
-
 
 
 class Events {
