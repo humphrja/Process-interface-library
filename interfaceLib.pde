@@ -1,11 +1,14 @@
 Window[] windows;
 int currentWindow;
 
+Slider hue;
+Slider radius;
+
 void setup() {
   size(1000, 1000);
 
   currentWindow = 0;
-  windows = new Window[7];
+  windows = new Window[8];
 
   Events E = new Events();
 
@@ -79,6 +82,17 @@ void setup() {
   w6.addButton("addNewButton", new Object[] {w6}, E, "btn", random(width), random(height), 100, 100);
 
   windows[6] = w6;
+  
+  
+  Window w7 = new Window(winPalette);
+  createBackToHomeBtn(w7);
+  w7.addHeading("Sliders and switches");
+  hue = w7.addSlider(0, 360, width/2, height - 200, 500);
+  radius = w7.addSlider(50, 450, width - 200, height/2, 200);
+  radius.setAxis('v');
+  w7.addContent("sliderExample", new Object[]{}, this);
+  
+  windows[7] = w7;
 
 
   frameRate(120);
@@ -120,7 +134,7 @@ void createStartBtnGrid(Window w) {
   int spacing = 25;
 
   float ix = width/2 - (nx*btnW + (nx-1)*spacing)/2;
-  float iy = height - (ny*btnH + (ny+1)*spacing) - 150;
+  float iy = height - (ny*btnH + (ny+1)*spacing) - 250;
 
   String f = "setWindow";
 
@@ -136,6 +150,8 @@ void createStartBtnGrid(Window w) {
       w.addButton(f, args, this, labels[col + row*nx], x, y, btnW, btnH);
     }
   }
+  
+  w.addButton(f, new Object[]{7}, this, "Interactives", ix + 1*(btnW + spacing), iy + 2*(btnH + spacing), btnW, btnH);
 }
 
 
@@ -186,13 +202,12 @@ void testFunction() {
 }
 
 
-void testWindowDisplay(int offset) {
-  println(frameCount % 200);
-  float a = map(frameCount % 200, 0, 200, 0, 360);
-
-  colorMode(HSB, 360, 100, 100); 
-  fill(a, 255, 255);
-  ellipse(mouseX + offset, mouseY, 100, 100);
+void sliderExample() {
+  colorMode(HSB, 360, 100, 100);
+  strokeWeight(2);
+  stroke(0);
+  fill(hue.value, 100, 100);
+  ellipse(width/2, height/2, radius.value, radius.value);
 }
 
 

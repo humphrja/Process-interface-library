@@ -7,6 +7,7 @@ class Window {
   Button[] btns = new Button[0];
   Text[] texts = new Text[0];
   ScrollWindow[] sWindows = new ScrollWindow[0];      // These arrays contain the window's elements
+  Slider[] sliders = new Slider[0];
 
 
   // These 3 arrays are used for displaying any visual methods
@@ -60,6 +61,10 @@ class Window {
     for (ScrollWindow sw : sWindows) {                // Display scroll windows
       sw.display(sw.canvas);                              // Scroll windows display to a different PGraphics object (canvas) than the window itself
     }
+    
+    for (Slider s : sliders){
+      s.display(c);
+    }
 
     if (border) {                                     // Display border
       c.strokeWeight(borderStrokeWeight);
@@ -109,6 +114,15 @@ class Window {
 
     return txt;
   }
+  
+  Slider addSlider(float min, float max, float x, float y, float l){
+    Slider slider = new Slider(min, max, x, y, l, palette);
+    
+    sliders = Arrays.copyOf(sliders, sliders.length + 1);
+    sliders[sliders.length - 1] = slider;
+    
+    return slider;
+  }
 
   Method addContent(String mName, Object[] args, Object classInstance) {    // Provide the appropriate visual function(s) the window should display by adding a method to the window
     Method displayContent = null;
@@ -117,7 +131,6 @@ class Window {
 
     for (Method m : methods) {                                              // Searches through the array by method name and assigns displayContent to the corresponding method
       if (m.getName() == mName) {
-        println(m);
         displayContent = m;
       }
     }
